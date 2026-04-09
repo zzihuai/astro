@@ -3,6 +3,7 @@ import { Font } from 'astro:assets'
 
 import { prod } from 'astro-pure/server'
 import type { SiteMeta } from 'astro-pure/types'
+import { withBase, withSite } from 'astro-pure/utils'
 import config from 'virtual:config'
 
 type Props = SiteMeta
@@ -11,7 +12,15 @@ const { articleDate, description, ogImage, title } = Astro.props
 
 const siteTitle = `${title} ${config.titleDelimiter} ${config.title}`
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
-const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url).href
+const siteRoot = Astro.site ?? new URL(import.meta.env.SITE)
+const socialImageURL = withSite(ogImage ? ogImage : config.socialCard, siteRoot)
+const faviconHref = withBase(config.favicon.href)
+const favicon32Href = withBase('/favicon/favicon-32x32.png')
+const favicon16Href = withBase('/favicon/favicon-16x16.png')
+const appleTouchIconHref = withBase('/favicon/apple-touch-icon.png')
+const manifestHref = withBase('/favicon/site.webmanifest')
+const sitemapHref = withSite('/sitemap-index.xml', siteRoot)
+const rssHref = withSite('/rss.xml', siteRoot)
 ---
 
 <meta charset='utf-8' />
@@ -20,12 +29,12 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <title>{siteTitle}</title>
 
 {/* Icons / Favicon */}
-<link rel='icon' type={config.favicon.type} href={config.favicon.href} />
-<link rel='shortcut icon' type={config.favicon.type} href={config.favicon.href} />
-<link rel='icon' type='image/png' sizes='32x32' href='/favicon/favicon-32x32.png' />
-<link rel='icon' type='image/png' sizes='16x16' href='/favicon/favicon-16x16.png' />
-<link rel='apple-touch-icon' sizes='180x180' href='/favicon/apple-touch-icon.png' />
-<link rel='manifest' href='/favicon/site.webmanifest' />
+<link rel='icon' type={config.favicon.type} href={faviconHref} />
+<link rel='shortcut icon' type={config.favicon.type} href={faviconHref} />
+<link rel='icon' type='image/png' sizes='32x32' href={favicon32Href} />
+<link rel='icon' type='image/png' sizes='16x16' href={favicon16Href} />
+<link rel='apple-touch-icon' sizes='180x180' href={appleTouchIconHref} />
+<link rel='manifest' href={manifestHref} />
 
 {/* Font preloads */}
 <Font cssVariable='--font-satoshi' preload={[{ subset: 'latin', style: 'normal' }]} />
@@ -74,14 +83,14 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <meta content={socialImageURL} property='twitter:image' />
 
 {/* Sitemap */}
-<link href='/sitemap-index.xml' rel='sitemap' />
+<link href={sitemapHref} rel='sitemap' />
 
 {/* RSS auto-discovery */}
 <link
   rel='alternate'
   type='application/rss+xml'
   title={config.title}
-  href={`${Astro.site}rss.xml`}
+  href={rssHref}
 />
 
 <meta content={Astro.generator} name='generator' />

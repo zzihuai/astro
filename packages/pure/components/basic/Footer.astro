@@ -1,6 +1,7 @@
 ---
 import config from 'virtual:config'
 
+import { withBase } from '../../utils'
 import { Icon } from '../user'
 
 const footerConf = config.footer
@@ -26,7 +27,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
               {footerLink1.map(({ title, link, style }, index) => (
                 <>
                   <!- prettier-ignore -->
-                  <a href={link} target='_blank' class={style}>{title}</a>
+                  <a href={withBase(link)} target='_blank' class={style}>{title}</a>
                   {index < footerLink1.length - 1 && <span class='mx-1'>•</span>}
                 </>
               ))}
@@ -46,7 +47,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
                     .filter(({ pos }) => pos === 2)
                     .map(({ title, link, style }) => (
                       <span>
-                        <a href={link} target='_blank' class={style}>{title}</a>
+                        <a href={withBase(link)} target='_blank' class={style}>{title}</a>
                       </span>
                     ))}
                 </span>
@@ -71,7 +72,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
         {
           footerConf.social &&
             Object.entries(footerConf.social).map(([platform, { label, url }]) => (
-              <a href={url} aria-label={label}>
+              <a href={withBase(url)} aria-label={label}>
                 <Icon name={platform as keyof typeof footerConf.social} />
               </a>
             ))

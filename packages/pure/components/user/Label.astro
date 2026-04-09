@@ -1,7 +1,7 @@
 ---
 import type { HTMLTag, Polymorphic } from 'astro/types'
 
-import { cn } from '../../utils'
+import { cn, withBase } from '../../utils'
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   title: string
@@ -9,6 +9,7 @@ type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   class?: string
 }
 const { class: className, as: Tag = 'div', title, href, ...props } = Astro.props
+const resolvedHref = withBase(href)
 ---
 
 <Tag
@@ -17,7 +18,7 @@ const { class: className, as: Tag = 'div', title, href, ...props } = Astro.props
     'flex flex-row items-center justify-center gap-x-2',
     href && 'hover:opacity-75 transition-all'
   )}
-  href={href}
+  href={resolvedHref}
   {...props}
 >
   <slot name='icon' />

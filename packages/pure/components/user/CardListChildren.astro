@@ -2,7 +2,7 @@
 import type { HTMLTag, Polymorphic } from 'astro/types'
 
 import type { CardList } from '../../types'
-import { cn } from '../../utils'
+import { cn, withBase } from '../../utils'
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   main?: boolean
@@ -18,7 +18,7 @@ const { main = false, children } = Astro.props
       return (
         <li>
           <Tag
-            href={child.link}
+            href={child.link ? withBase(child.link) : undefined}
             class={cn(
               'block',
               main ? 'text-foreground' : 'text-muted-foreground',
