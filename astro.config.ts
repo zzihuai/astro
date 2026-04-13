@@ -5,6 +5,7 @@ import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
 // Local integrations
+import rehypeAddBaseToPublicAssets from './src/plugins/rehype-add-base-to-public-assets.ts'
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
 // Shiki
 import {
@@ -21,12 +22,14 @@ import {
 } from './src/plugins/shiki-official/transformers.ts'
 import config from './src/site.config.ts'
 
+const base = '/astro'
+
 // https://astro.build/config
 export default defineConfig({
   // [Basic]
   site: 'https://zzihuai.github.io',
   // Deploy to a sub path
-  base: '/astro',
+  base,
   trailingSlash: 'never',
   // root: './my-project-directory',
 
@@ -56,6 +59,7 @@ export default defineConfig({
     rehypePlugins: [
       [rehypeKatex, {}],
       rehypeHeadingIds,
+      [rehypeAddBaseToPublicAssets, base],
       [
         rehypeAutolinkHeadings,
         {
@@ -89,9 +93,9 @@ export default defineConfig({
         // @ts-ignore this happens due to multiple versions of shiki types
         addLanguage(),
         // @ts-ignore this happens due to multiple versions of shiki types
-        addCopyButton(2000), // timeout in ms
+        addCopyButton(2000, base), // timeout in ms
         // @ts-ignore this happens due to multiple versions of shiki types
-        addCollapse(15) // max lines that needs to collapse
+        addCollapse(15, base) // max lines that needs to collapse
       ]
     }
   },

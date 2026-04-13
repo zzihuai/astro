@@ -1,6 +1,11 @@
 import { h } from 'hastscript'
 import type { ShikiTransformer } from 'shiki'
 
+function resolvePublicAsset(base: string, path: string) {
+  const normalizedBase = base === '/' ? '' : base.replace(/\/$/, '')
+  return `${normalizedBase}${path}`
+}
+
 function parseMetaString(str = '') {
   return Object.fromEntries(
     str.split(' ').reduce(
@@ -85,8 +90,9 @@ export const addLanguage = (): ShikiTransformer => {
 }
 
 // Add a copy button to the code block
-export const addCopyButton = (timeout?: number): ShikiTransformer => {
+export const addCopyButton = (timeout?: number, base = '/'): ShikiTransformer => {
   const toggleMs = timeout || 2000
+  const codeIconHref = resolvePublicAsset(base, '/icons/code.svg')
   return {
     name: 'shiki-transformer-copy-button',
     pre(node) {
@@ -105,12 +111,12 @@ export const addCopyButton = (timeout?: number): ShikiTransformer => {
         [
           h('div', { class: 'ready' }, [
             h('svg', { class: 'size-5' }, [
-              h('use', { href: '/icons/code.svg#mingcute-clipboard-line' })
+              h('use', { href: `${codeIconHref}#mingcute-clipboard-line` })
             ])
           ]),
           h('div', { class: 'success hidden' }, [
             h('svg', { class: 'size-5' }, [
-              h('use', { href: '/icons/code.svg#mingcute-file-check-line' })
+              h('use', { href: `${codeIconHref}#mingcute-file-check-line` })
             ])
           ])
         ]
@@ -121,8 +127,9 @@ export const addCopyButton = (timeout?: number): ShikiTransformer => {
 }
 
 // Add a copy button to the code block
-export const addCollapse = (displayLineCount?: number): ShikiTransformer => {
+export const addCollapse = (displayLineCount?: number, base = '/'): ShikiTransformer => {
   const line = displayLineCount || 15
+  const codeIconHref = resolvePublicAsset(base, '/icons/code.svg')
   return {
     name: 'shiki-transformer-add-collapse',
     pre(node) {
@@ -140,7 +147,7 @@ export const addCollapse = (displayLineCount?: number): ShikiTransformer => {
         },
         [
           h('svg', { class: 'size-5' }, [
-            h('use', { href: '/icons/code.svg#mingcute-arrow-down-line' })
+            h('use', { href: `${codeIconHref}#mingcute-arrow-down-line` })
           ]),
           h('span', { class: 'desc' }, ' code')
         ]
