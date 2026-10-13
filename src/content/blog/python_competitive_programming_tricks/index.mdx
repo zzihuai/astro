@@ -1,0 +1,1115 @@
+---
+title: 'Python 算法竞赛 Trick'
+publishDate: '2025-07-03'
+updatedDate: '2025-07-10'
+description: 'Python 算法竞赛 Trick'
+tags:
+  - Draft
+language: 'English'
+# Remove or set false to turn draft page into normal ones
+draft: false
+---
+
+import { Aside, Collapse, TabItem, Tabs } from 'astro-pure/user'
+import AttentionHeatmapDemo from '@/components/demos/python-competitive-programming/AttentionHeatmapDemo.astro'
+import CopySemanticsPlayground from '@/components/demos/python-competitive-programming/CopySemanticsPlayground.astro'
+import FunctionPlotDemo from '@/components/demos/python-competitive-programming/FunctionPlotDemo.astro'
+import MatrixTransformDemo from '@/components/demos/python-competitive-programming/MatrixTransformDemo.astro'
+import ModelStructureDiagramDemo from '@/components/demos/python-competitive-programming/ModelStructureDiagramDemo.astro'
+import ProbabilitySimulationDemo from '@/components/demos/python-competitive-programming/ProbabilitySimulationDemo.astro'
+import StdinVisualizerFrame from '@/components/demos/python-competitive-programming/StdinVisualizerFrame.astro'
+
+# Python 算法竞赛 Trick
+
+面向人群：`C++ -> Python` 的算法竞赛选手。
+
+目标：不是讲完整 Python 语法，而是讲比赛里最常用、最容易踩坑、最值得背下来的东西。
+
+## 0. 先把几种交互方式嵌进本文
+
+这部分不只是“介绍思路”，而是直接把几种常见做法实际嵌进文章里，方便你对比手感。
+
+<Aside type='tip' title='这几种方式怎么选'>
+
+- **原生 HTML**：最轻，适合提示折叠、问答、轻量切换。
+- **现成 Astro 组件**：最省事，风格统一，适合文章内反复复用。
+- **自定义 Astro 组件**：适合做和正文强相关的小实验器、小可视化。
+- **`iframe` / 第三方嵌入**：适合隔离脚本样式，或者挂完整独立 demo。
+
+</Aside>
+
+### 0.1 原生 HTML：`<details>` 折叠块
+
+这种方式零依赖，最适合“点一下展开提示 / 解法提醒 / 常见坑”的场景。
+
+<details>
+  <summary>点击展开：什么时候竞赛里优先考虑 Python？</summary>
+
+- 题目核心在字符串、哈希、模拟、字典统计。
+- 需要快速把复杂分支逻辑写对。
+- 大整数、排序、集合去重会明显省心。
+- 如果你一眼就感觉常数非常卡，那最好先警惕一下。
+
+</details>
+
+### 0.2 Astro 组件：`Tabs` / `Collapse`
+
+如果你希望交互块和站点样式天然一致，优先考虑组件化封装。
+
+<Tabs>
+  <TabItem label='输入'>
+    比赛里最常见的增强块，就是把多种输入模板切成标签页：单组数据、多组数据、二维网格，各放一页，读者切一下就能看懂。
+  </TabItem>
+  <TabItem label='陷阱'>
+    像“`b = a` 不是复制”“二维数组不能写成 `[[0] * m] * n`”这种坑，非常适合做成折叠块或
+    Tabs，让正文更干净。
+  </TabItem>
+  <TabItem label='结论'>
+    教学博客里最常见的目标不是做大应用，而是把“一个概念的临门一脚”讲透，所以中小型组件往往已经够用了。
+  </TabItem>
+</Tabs>
+
+<Collapse title='点击展开：什么时候优先用现成 Astro 组件？'>
+  <div>
+    当你想把“提示框 / 对比块 / 标签页 /
+    折叠块”反复用于多篇文章时，现成组件通常是性价比最高的方案：统一、稳、维护成本低。
+  </div>
+</Collapse>
+
+### 0.3 自定义 Astro 组件：变量绑定 / 拷贝演示器
+
+如果文章里有某个坑特别值得“让读者亲手点一下”，就适合单独做一个小组件。下面这个 demo 正好对应本文后面会讲到的拷贝陷阱。
+
+<CopySemanticsPlayground />
+
+### 0.4 其他方式：`iframe` 隔离实验台
+
+如果你想嵌一个脚本较多、样式独立、甚至未来可能替换成第三方工具的小 demo，`iframe` 会很稳。下面这个小实验台演示了“样例输入被不同读法拆成什么”。
+
+<StdinVisualizerFrame />
+
+<Aside title='补充'>
+
+当前这个仓库已经开好了 `MDX`，所以像上面这样把 Astro 组件嵌进文章里非常顺手。若你后面还想做更复杂的交互（例如完整代码沙盒），再加 React / Vue / Svelte island 也完全可以。
+
+</Aside>
+
+### 0.5 数学原理：函数图像与切线
+
+如果你要讲函数形状、导数、极值点，最稳的做法通常是 `SVG + slider`。读者拖一下参数，公式和图像会立刻建立对应关系。
+
+<FunctionPlotDemo />
+
+### 0.6 数学原理：矩阵变换
+
+线性代数类内容很适合做成“左边原图，右边变换结果”的并排演示。这样像行列式、面积缩放、旋转、剪切都非常直观。
+
+<MatrixTransformDemo />
+
+### 0.7 数学原理：概率采样
+
+讲概率和统计时，最重要的往往不是公式本身，而是“采样次数变大后会发生什么”。这类小模拟器对教学博客很有帮助。
+
+<ProbabilitySimulationDemo />
+
+### 0.8 模型结构：Attention 热力图
+
+如果你在讲 Transformer 或者序列建模，一个小型热力图几乎是最划算的组件：读者一眼就能看到“谁在关注谁”。
+
+<AttentionHeatmapDemo />
+
+### 0.9 模型结构：结构流图
+
+讲模型总览时，建议把重点放在“模块职责 + 张量形状 + 数据流向”这三件事。下面这个 demo 用同一套交互同时演示 `MLP / CNN / Transformer`。
+
+<ModelStructureDiagramDemo />
+
+## 1. 先说结论：Python 适合什么，不适合什么
+
+Python 在竞赛里很强的场景：
+
+- 数学、模拟、字符串、哈希、前缀和、二分、搜索
+- 需要快速写出复杂逻辑的题
+- 大整数、集合、映射、排序花活比较多的题
+
+Python 相对吃亏的场景：
+
+- 常数极卡的题
+- 深递归很重的树题
+- 需要大量对象创建、极限图遍历的题
+- 同样是 `$O(n \log n)$`，但常数比 `C++` 大得多的场景
+
+一句话：`Python` 更像“自带很多高级武器”的语言，但你必须知道哪些写法便宜，哪些写法很贵。
+
+## 2. 比赛最小模板
+
+```python
+import sys
+from collections import defaultdict, Counter, deque
+from bisect import bisect_left, bisect_right
+from heapq import heappush, heappop, heapify
+from itertools import accumulate, permutations, combinations
+
+input = sys.stdin.readline
+
+
+def solve():
+    n = int(input())
+    a = list(map(int, input().split()))
+    a.sort()
+    print(*a)
+
+
+if __name__ == "__main__":
+    t = 1
+    # t = int(input())
+    for _ in range(t):
+        solve()
+```
+
+常见习惯：
+
+- `input = sys.stdin.readline` 基本必写
+- 逻辑放进 `solve()`
+- 多组数据就开 `t`
+- 常用模块按模板带上，现场少想
+
+## 3. 输入输出
+
+### 3.1 快读
+
+```python
+import sys
+input = sys.stdin.readline
+```
+
+注意：
+
+- `input()` 结尾会带换行，需要时用 `.strip()`
+- 但读整数时通常不用 `strip()`，因为 `int()` 和 `split()` 会自动处理空白
+
+### 3.2 常见输入写法
+
+```python
+n = int(input())
+a = list(map(int, input().split()))
+x, y = map(int, input().split())
+s = input().strip()
+```
+
+二维数组：
+
+```python
+grid = [list(map(int, input().split())) for _ in range(n)]
+board = [input().strip() for _ in range(n)]
+```
+
+多组数据：
+
+```python
+t = int(input())
+for _ in range(t):
+    solve()
+```
+
+### 3.3 快写
+
+```python
+print(ans)
+print(x, y, z)
+print(*a)
+sys.stdout.write("YES\n")
+```
+
+大量输出时：
+
+```python
+out = []
+for _ in range(t):
+    out.append(str(ans))
+sys.stdout.write("\n".join(out))
+```
+
+经验：
+
+- 少量输出直接 `print`
+- 大量输出优先收集到列表后 `"\n".join(...)`
+
+## 4. 最重要的语言差异：Python 变量和 C++ 变量不是一个东西
+
+这是 `C++` 选手转 `Python` 最容易翻车的地方。
+
+### 4.1 Python 变量更像“名字绑定到对象”
+
+```python
+a = [1, 2]
+b = a
+b.append(3)
+print(a)  # [1, 2, 3]
+```
+
+这里不是“复制给了 `b`”，而是 `a` 和 `b` 指向同一个列表对象。
+
+对应理解：
+
+- `int / str / tuple` 这类通常当作不可变对象看
+- `list / dict / set / deque` 这类是可变对象
+
+### 4.2 最经典坑：二维数组不能这么开
+
+错误：
+
+```python
+g = [[0] * m] * n
+g[0][0] = 1
+```
+
+这样每一行其实是同一个对象。
+
+正确：
+
+```python
+g = [[0] * m for _ in range(n)]
+```
+
+同理，邻接表也不能写成：
+
+```python
+g = [[]] * n  # 错
+```
+
+应该写：
+
+```python
+g = [[] for _ in range(n)]
+```
+
+### 4.3 函数传参不是 C++ 的值传递
+
+```python
+def f(a):
+    a.append(1)
+
+
+x = []
+f(x)
+print(x)  # [1]
+```
+
+如果函数里修改了可变对象，外面能看到。
+
+但如果只是重新绑定，不会影响外面：
+
+```python
+def f(a):
+    a = [1, 2, 3]
+
+
+x = []
+f(x)
+print(x)  # []
+```
+
+### 4.4 拷贝要明确
+
+浅拷贝：
+
+```python
+b = a[:]
+b = list(a)
+b = a.copy()
+```
+
+深拷贝：
+
+```python
+import copy
+b = copy.deepcopy(a)
+```
+
+比赛里绝大部分时候：
+
+- 一维列表复制用 `a[:]`
+- 多维、嵌套结构要小心浅拷贝不够
+
+## 5. 数值与运算差异
+
+### 5.1 Python 整数不会像 C++ `int/long long` 那样溢出
+
+```python
+x = 10 ** 100
+```
+
+优点：不用担心爆 `long long`。
+
+代价：大整数运算更慢。
+
+### 5.2 除法一定分清
+
+```python
+5 / 2   # 2.5
+5 // 2  # 2
+```
+
+比赛里整除一般用 `//`。
+
+### 5.3 负数取模与 C++ 不同
+
+```python
+-1 % 5  # 4
+```
+
+Python 的 `%` 结果与模数同号。
+
+所以很多模运算写起来更自然，但从 `C++` 迁移代码时要特别注意。
+
+### 5.4 幂运算
+
+```python
+2 ** 10
+pow(2, 10)
+pow(2, 10, MOD)  # 快速幂取模
+```
+
+`pow(a, b, mod)` 非常常用，相当于高效版快速幂。
+
+### 5.5 位运算常用接口
+
+```python
+x.bit_length()  # 二进制位数
+x.bit_count()   # 1 的个数
+lowbit = x & -x
+```
+
+对应 `C++` 里常见的：
+
+- `__builtin_popcount(x)` -> `x.bit_count()`
+- 求最高位长度 -> `x.bit_length()`
+
+如果题里有很多状态压缩、子集枚举，这几个很常用。
+
+## 6. 常用数据结构
+
+### 6.1 `list`：最像 `vector`
+
+常用操作：
+
+```python
+a = []
+a.append(3)
+a.pop()
+a[-1]
+len(a)
+a.sort()
+b = sorted(a)
+```
+
+注意复杂度：
+
+- 尾部 `append/pop` 是均摊 `$O(1)$`
+- 中间插入删除是 `$O(n)$`
+- `list` 不是队列，别拿它做 `pop(0)`
+
+栈直接拿列表：
+
+```python
+st = []
+st.append(x)
+x = st.pop()
+```
+
+### 6.2 `deque`：双端队列
+
+```python
+from collections import deque
+
+q = deque()
+q.append(1)
+q.appendleft(0)
+q.pop()
+q.popleft()
+```
+
+适合：
+
+- BFS 队列
+- 双端维护
+
+### 6.3 `dict`：哈希表
+
+```python
+mp = {}
+mp[x] = mp.get(x, 0) + 1
+```
+
+更常见：
+
+```python
+from collections import defaultdict
+
+cnt = defaultdict(int)
+g = defaultdict(list)
+cnt[x] += 1
+g[u].append(v)
+```
+
+### 6.4 `set`：哈希集合
+
+```python
+s = set()
+s.add(x)
+s.discard(x)
+if x in s:
+    ...
+```
+
+常见用途：
+
+- 判重
+- 维护出现过的值
+- 配合哈希做状态压缩
+
+### 6.5 `Counter`：频率统计
+
+```python
+from collections import Counter
+
+cnt = Counter(a)
+print(cnt[5])
+```
+
+适合：
+
+- 统计出现次数
+- 快速做词频/元素频率
+
+### 6.6 `heapq`：堆，默认小根堆
+
+```python
+from heapq import heappush, heappop, heapify
+
+h = []
+heappush(h, 3)
+heappush(h, 1)
+heappush(h, 2)
+print(heappop(h))  # 1
+```
+
+建堆：
+
+```python
+h = [5, 2, 8, 1]
+heapify(h)
+```
+
+大根堆常见写法：
+
+```python
+heappush(h, -x)
+x = -heappop(h)
+```
+
+堆里放二元组非常常见：
+
+```python
+heappush(h, (dist, node))
+```
+
+因为元组支持字典序比较，和 `pair` 很像。
+
+### 6.7 `bisect`：二分
+
+```python
+from bisect import bisect_left, bisect_right
+
+a = [1, 2, 2, 2, 5]
+l = bisect_left(a, 2)   # 1
+r = bisect_right(a, 2)  # 4
+```
+
+对应 `C++`：
+
+- `lower_bound` -> `bisect_left`
+- `upper_bound` -> `bisect_right`
+
+插入位置：
+
+```python
+pos = bisect_left(a, x)
+```
+
+注意：二分只管找位置，不会自动维护有序，需要你自己保证 `a` 已排序。
+
+## 7. 排序是 Python 的强项
+
+### 7.1 基本排序
+
+```python
+a.sort()
+a.sort(reverse=True)
+b = sorted(a)
+```
+
+区别：
+
+- `a.sort()` 原地排序
+- `sorted(a)` 返回新列表
+
+### 7.2 按 key 排序
+
+按绝对值排序：
+
+```python
+a.sort(key=abs)
+```
+
+按第二关键字排序：
+
+```python
+a.sort(key=lambda x: x[1])
+```
+
+先按第一维升序，再按第二维降序：
+
+```python
+a.sort(key=lambda x: (x[0], -x[1]))
+```
+
+这在区间排序、贪心、离线里极常见。
+
+### 7.3 元组排序非常好用
+
+```python
+a = [(2, 3), (1, 5), (2, 1)]
+a.sort()
+# [(1, 5), (2, 1), (2, 3)]
+```
+
+就是字典序，和 `pair/tuple` 在 `C++` 里的默认行为类似。
+
+### 7.4 稳定排序
+
+Python 排序是稳定的。
+
+所以可以先排次关键字，再排主关键字：
+
+```python
+a.sort(key=lambda x: x[1])
+a.sort(key=lambda x: x[0])
+```
+
+最终效果等价于按 `(x[0], x[1])` 排序。
+
+### 7.5 需要比较器时，用 `cmp_to_key`
+
+```python
+from functools import cmp_to_key
+
+
+def cmp(a, b):
+    if a + b < b + a:
+        return -1
+    if a + b > b + a:
+        return 1
+    return 0
+
+
+arr.sort(key=cmp_to_key(cmp))
+```
+
+但经验上：
+
+- 能写成 `key` 就不要写比较器
+- `key` 更快，也更 Pythonic
+
+## 8. 常用内建函数和语法糖
+
+### 8.1 `enumerate`
+
+```python
+for i, x in enumerate(a):
+    ...
+```
+
+代替：
+
+```python
+for i in range(len(a)):
+    x = a[i]
+```
+
+### 8.2 `zip`
+
+```python
+for x, y in zip(a, b):
+    ...
+```
+
+矩阵转置：
+
+```python
+b = list(zip(*a))
+```
+
+### 8.3 `any` / `all`
+
+```python
+if any(x < 0 for x in a):
+    ...
+
+if all(x % 2 == 0 for x in a):
+    ...
+```
+
+### 8.4 `min` / `max` 带 `key`
+
+```python
+mx = max(points, key=lambda p: p[1])
+```
+
+### 8.5 字符与 ASCII
+
+```python
+ord('a')      # 97
+chr(97)       # 'a'
+idx = ord(c) - ord('a')
+```
+
+### 8.6 拼字符串不要暴力 `+=`
+
+错误倾向：
+
+```python
+s = ""
+for x in arr:
+    s += x
+```
+
+更好：
+
+```python
+s = "".join(arr)
+```
+
+### 8.7 `range` 很像懒序列，不是数组
+
+正向：
+
+```python
+for i in range(n):
+    ...
+```
+
+倒序：
+
+```python
+for i in range(n - 1, -1, -1):
+    ...
+```
+
+如果只是需要 `0..n-1`，直接 `range(n)` 即可，不需要像 `C++` 那样先真的造一个数组。
+
+## 9. `itertools` 很适合比赛
+
+### 9.1 排列、组合、笛卡尔积
+
+```python
+from itertools import permutations, combinations, product
+
+list(permutations([1, 2, 3]))
+list(combinations([1, 2, 3], 2))
+list(product(range(2), repeat=3))
+```
+
+注意：
+
+- 很方便
+- 但别乱用，规模一大就直接炸
+
+### 9.2 前缀和：`accumulate`
+
+```python
+from itertools import accumulate
+
+a = [1, 2, 3, 4]
+pre = [0] + list(accumulate(a))
+```
+
+于是区间和：
+
+```python
+sum_lr = pre[r + 1] - pre[l]
+```
+
+### 9.3 分组：`groupby`
+
+```python
+from itertools import groupby
+
+for k, group in groupby(sorted(a)):
+    cnt = len(list(group))
+```
+
+有时能很优雅，但比赛里不要为了优雅牺牲可读性。
+
+## 10. `C++ STL` 常用功能到 Python 的映射
+
+| C++                                              | Python                          |
+| ------------------------------------------------ | ------------------------------- |
+| `vector<int> a(n)`                               | `a = [0] * n`                   |
+| `vector<vector<int>> g(n)`                       | `g = [[] for _ in range(n)]`    |
+| `pair<int,int>`                                  | `(x, y)`                        |
+| `tuple`                                          | `tuple`                         |
+| `queue<int>`                                     | `deque()`                       |
+| `priority_queue<int, vector<int>, greater<int>>` | `heapq`                         |
+| `unordered_map<int,int>`                         | `dict` / `defaultdict(int)`     |
+| `unordered_set<int>`                             | `set`                           |
+| `sort(a.begin(), a.end())`                       | `a.sort()`                      |
+| `sort(..., cmp)`                                 | `sort(key=...)` 或 `cmp_to_key` |
+| `lower_bound`                                    | `bisect_left`                   |
+| `upper_bound`                                    | `bisect_right`                  |
+| `iota(a.begin(), a.end(), 0)`                    | `list(range(n))`                |
+| `partial_sum`                                    | `accumulate`                    |
+| `next_permutation`                               | 自己写函数或用 `itertools`      |
+
+## 11. 比赛里很常用的方法
+
+### 11.1 去重
+
+保序去重：
+
+```python
+a = list(dict.fromkeys(a))
+```
+
+不保序去重：
+
+```python
+a = list(set(a))
+```
+
+### 11.2 坐标压缩
+
+```python
+b = sorted(set(a))
+mp = {x: i for i, x in enumerate(b)}
+res = [mp[x] for x in a]
+```
+
+### 11.3 二维方向数组
+
+```python
+dirs = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+```
+
+八方向：
+
+```python
+dirs8 = [
+    (1, 0), (-1, 0), (0, 1), (0, -1),
+    (1, 1), (1, -1), (-1, 1), (-1, -1),
+]
+```
+
+### 11.4 交换
+
+```python
+a[i], a[j] = a[j], a[i]
+```
+
+不用临时变量，比赛里非常顺手。
+
+### 11.5 反转
+
+```python
+a.reverse()
+b = a[::-1]
+```
+
+区别：
+
+- `reverse()` 原地修改
+- `[::-1]` 返回拷贝
+
+### 11.6 子数组/子串切片
+
+```python
+b = a[l:r]
+```
+
+注意：切片是 `$O(r-l)$` 的复制，不是 `C++ string_view`。
+
+很多 `C++` 选手会低估这个成本。
+
+## 12. `next_permutation` 怎么办
+
+如果只是暴力枚举，直接：
+
+```python
+from itertools import permutations
+
+for p in permutations(a):
+    ...
+```
+
+但如果你真的需要“原地求下一个排列”，可以背这个模板：
+
+```python
+def next_permutation(a):
+    i = len(a) - 2
+    while i >= 0 and a[i] >= a[i + 1]:
+        i -= 1
+    if i < 0:
+        return False
+
+    j = len(a) - 1
+    while a[j] <= a[i]:
+        j -= 1
+
+    a[i], a[j] = a[j], a[i]
+    a[i + 1:] = reversed(a[i + 1:])
+    return True
+```
+
+用法：
+
+```python
+a.sort()
+while True:
+    print(a)
+    if not next_permutation(a):
+        break
+```
+
+## 13. 图论和搜索里的常见 Python 写法
+
+### 13.1 邻接表
+
+```python
+g = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    u -= 1
+    v -= 1
+    g[u].append(v)
+    g[v].append(u)
+```
+
+### 13.2 BFS
+
+```python
+from collections import deque
+
+dist = [-1] * n
+dist[s] = 0
+q = deque([s])
+
+while q:
+    u = q.popleft()
+    for v in g[u]:
+        if dist[v] == -1:
+            dist[v] = dist[u] + 1
+            q.append(v)
+```
+
+### 13.3 DFS
+
+递归版：
+
+```python
+import sys
+sys.setrecursionlimit(1 << 25)
+
+
+def dfs(u, fa):
+    for v in g[u]:
+        if v == fa:
+            continue
+        dfs(v, u)
+```
+
+注意：
+
+- Python 递归栈弱于 `C++`
+- 树很深时更推荐手写栈
+
+非递归版：
+
+```python
+st = [(s, -1)]
+while st:
+    u, fa = st.pop()
+    for v in g[u]:
+        if v != fa:
+            st.append((v, u))
+```
+
+## 14. 并查集模板
+
+```python
+class DSU:
+    def __init__(self, n):
+        self.fa = list(range(n))
+        self.sz = [1] * n
+
+    def find(self, x):
+        while self.fa[x] != x:
+            self.fa[x] = self.fa[self.fa[x]]
+            x = self.fa[x]
+        return x
+
+    def union(self, x, y):
+        x = self.find(x)
+        y = self.find(y)
+        if x == y:
+            return False
+        if self.sz[x] < self.sz[y]:
+            x, y = y, x
+        self.fa[y] = x
+        self.sz[x] += self.sz[y]
+        return True
+```
+
+说明：
+
+- Python 里类可以放心写，小模板够用
+- 如果极致卡常，也可以改成纯函数 + 数组
+
+## 15. 竞赛常见坑
+
+### 15.1 `[[0] * m] * n`
+
+重复强调一次：这是坑。
+
+### 15.2 默认参数不要放可变对象
+
+错误：
+
+```python
+def f(a=[]):
+    a.append(1)
+    return a
+```
+
+正确：
+
+```python
+def f(a=None):
+    if a is None:
+        a = []
+    a.append(1)
+    return a
+```
+
+### 15.3 不要把 `list` 当队列
+
+错误：
+
+```python
+q = []
+q.pop(0)
+```
+
+应该用 `deque.popleft()`。
+
+### 15.4 切片会复制
+
+```python
+b = a[:]
+```
+
+这是复制，不是视图。
+
+### 15.5 `sort()` 没有返回值
+
+错误：
+
+```python
+b = a.sort()
+```
+
+正确：
+
+```python
+a.sort()
+b = sorted(a)
+```
+
+### 15.6 浮点数尽量少碰
+
+能用整数就用整数。
+
+例如比较：
+
+- 不要判断两个浮点数是否严格相等
+- 很多斜率、平均值问题都能转化
+
+## 16. 卡常经验
+
+### 16.1 优先使用局部变量
+
+局部变量访问比全局变量快。
+
+例如在热循环里，把常用函数先绑定出来有时会更快：
+
+```python
+push = heappush
+pop = heappop
+```
+
+不过这属于后期优化，不要一开始就写得太丑。
+
+### 16.2 少造对象
+
+例如：
+
+- 不要在循环里反复切片
+- 不要在循环里频繁创建大元组/大列表
+- 能原地修改就原地修改
+
+### 16.3 能迭代写就别深递归
+
+Python 的函数调用成本和递归成本都比 `C++` 高。
+
+### 16.4 大输入时，`sys.stdin.readline` 和批量输出很重要
+
+这往往是最划算的优化。
+
+### 16.5 不要迷信一行流
+
+比赛代码首要目标是：
+
+- 对
+- 快
+- 不容易写错
+
+不是“写成最短”。
+
+## 17. 推荐背熟的几行
+
+```python
+input = sys.stdin.readline
+g = [[] for _ in range(n)]
+q = deque([s])
+pre = [0] + list(accumulate(a))
+pos = bisect_left(a, x)
+cnt = Counter(a)
+mp = defaultdict(int)
+a.sort(key=lambda x: (x[0], -x[1]))
+```
+
+## 18. 一份个人建议
+
+如果你本来是 `C++` 选手，转 `Python` 最该练的不是“语法”，而是下面三件事：
+
+1. 看到题后，立刻知道该用什么容器：`list / dict / set / heap / deque`
+2. 看到排序需求后，立刻能写出 `key=lambda ...`
+3. 对“哪些操作是复制、哪些操作是原地修改”非常敏感
+
+真正常见的失误，不是不会写算法，而是：
+
+- 不小心共享了同一个列表
+- 不小心把 `$O(1)$` 写成 `$O(n)$`
+- 不小心在热循环里做了很多隐藏复制
+
+如果你把上面这些坑踩熟，`Python` 在竞赛里会很好用。
